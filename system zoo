@@ -1,0 +1,133 @@
+using System;
+using System.Collections.Generic;
+
+public abstract class Animal{
+    public string Nome { get; set; }
+    private int idade;
+
+    public int Idade{
+        get { return idade; }
+        set { idade = value < 0 ? 1 : value; }
+    }
+
+    public Animal(string nome, int idade){
+        Nome = nome;
+        Idade = idade;
+    }
+
+    public abstract void EmitirSom();
+    public virtual void Apresentar(){
+        Console.WriteLine("Nome: {0}, Idade: {1}", Nome, Idade);
+    }
+}
+
+// Classe derivada corrigida
+public class Cachorro : Animal{
+    public Cachorro(string nome, int idade) : base(nome, idade) { }
+    public override void EmitirSom(){
+        Console.WriteLine("Au Au");
+    }
+}
+
+public class Gato : Animal{
+    public Gato(string nome, int idade) : base(nome, idade) { }
+    public override void EmitirSom(){
+        Console.WriteLine("Miau");
+    }
+}
+
+public class Passaro : Animal{
+    public Passaro(string nome, int idade) : base(nome, idade) { }
+    public override void EmitirSom(){
+        Console.WriteLine("Piu Piu");
+    }
+    public void Voar(){
+        Console.WriteLine("O pássaro está voando!");
+    }
+}
+
+// Implementação do Zoo com encapsulamento
+public class Zoo{
+    private List<Animal> animais = new List<Animal>();
+
+    public void AdicionarAnimal(Animal animal){
+        animais.Add(animal);
+    }
+
+    public void MostrarAnimais(){
+        foreach (var animal in animais){
+            animal.Apresentar();
+            animal.EmitirSom();
+            Console.WriteLine("-----------");
+        }
+    }
+}
+public class veterinario{
+    public string Especialidade {get;  private set;}
+
+    public veterinario(string especialidade){
+        if (especialidade != "Felinos" && especialidade != "Caninos"){
+            throw new ArgumentException("Especialidade inválida! Escolha entre 'Felinos' ou 'Caninos'.");
+        }
+        Especialidade = especialidade;
+    }
+    public void Examinar(Animal animal){
+        Console.WriteLine($"Veterinário especializado em {Especialidade} está examinando {animal.Nome}.");
+        animal.EmitirSom();
+    }
+}
+
+class Program{
+    static void Main(){
+        Zoo zoo = new Zoo();
+        bool continuar = true;
+
+
+        while (continuar){
+            Console.WriteLine("Escolha uma opção:");
+            Console.WriteLine("1. Adicionar Cachorro");
+            Console.WriteLine("2. Adicionar Gato");
+            Console.WriteLine("3. Adicionar Pássaro");
+            Console.WriteLine("4. Mostrar Animais");
+            Console.WriteLine("5. Examinar Animais");
+            Console.WriteLine("6. Sair");
+
+            string escolha = Console.ReadLine();
+            switch (escolha){
+                case "1":
+                    Console.WriteLine("Digite o nome do Cachorro");
+                    string nomeCachorro = Console.ReadLine();
+                    Console.WriteLine("Digite a idade do Cachorro");
+                    int idadeCachorro = int.Parse(Console.ReadLine());
+                    zoo.AdicionarAnimal(new Cachorro(nomeCachorro,idadeCachorro));
+                    break;
+                case "2":
+                    Console.WriteLine("Digite o nome do Gato");
+                    string nomeGato = Console.ReadLine();
+                    Console.WriteLine("Digite a idade do Gato");
+                    int idadeGato = int.Parse(Console.ReadLine());
+                    zoo.AdicionarAnimal(new Gato(nomeGato, idadeGato));
+                    break;
+                case "3":
+                    Console.WriteLine("Digite o nome do Passaro");
+                    string nomepassaro= Console.ReadLine();
+                    Console.WriteLine("Digite a idade do Passaro");
+                    int idadePassaro = int.Parse(Console.ReadLine());
+                    zoo.AdicionarAnimal(new Passaro(nomepassaro, idadePassaro));
+                    break;
+                case "4":
+                    zoo.MostrarAnimais();
+                    break;
+                    case "5":
+                        
+                    break;
+                case "6":
+                    continuar = false;
+                    break;
+                default:
+                    Console.WriteLine("Opção inválida! :( ");
+                    break;
+            }
+        }
+    }
+}
