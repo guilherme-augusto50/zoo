@@ -76,7 +76,7 @@ public class Zoo
             Console.WriteLine("-----------");
         }
     }
-     public List<Animal> ObterAnimais()
+    public List<Animal> ObterAnimais()
     {
         return new List<Animal>(animais);
     }
@@ -97,10 +97,12 @@ public class veterinario
     {
         if ((Especialidade == "Felinos" && !(animal is Gato)) ||
             (Especialidade == "Caninos" && !(animal is Cachorro)) ||
-            (Especialidade == "Passaros" && !(animal is Passaro))){
-            Console.WriteLine("Este veterinário é especializado em felinos e não pode examinar outros animais.");
+            (Especialidade == "Passaros" && !(animal is Passaro)))
+        {
+            Console.WriteLine("Este veterinário é especializado em {0} e não pode examinar outros animais.",Especialidade);
         }
-        else{
+        else
+        {
             Console.WriteLine("Veterinário especializado em {0} está examinando {1}.", Especialidade, animal.Nome);
             animal.EmitirSom();
         }
@@ -149,7 +151,7 @@ class Program
                     zoo.AdicionarAnimal(new Gato(nomeGato, idadeGato));
                     break;
                 case "3":
-                    Console.Clear();    
+                    Console.Clear();
                     Console.WriteLine("Digite o nome do Passaro");
                     string nomepassaro = Console.ReadLine();
                     Console.WriteLine("Digite a idade do Passaro");
@@ -164,38 +166,41 @@ class Program
                     break;
                 case "5":
                     Console.Clear();
-                    Console.WriteLine("Escolha a especialidade do veterinário: (Felinos ou Caninos)");
+                    Console.Write("Escolha a especialidade do veterinário (Felinos, Caninos ou Passaros): ");
                     string especialidade = Console.ReadLine();
                     try
                     {
                         veterinario vet = new veterinario(especialidade);
 
-                        List<Animal> animais = zoo.ObterAnimais();
-                        if (animaisNoZoo.Count == 0 ){
-                            
-                        }
-
-                        Console.WriteLine("Escolha o animal para examinar:");
-                        for (int i = 0; i < zoo.animais.Count; i++)
+                        List<Animal> animaisNoZoo = zoo.ObterAnimais();
+                        if (animaisNoZoo.Count == 0)
                         {
-                            Console.WriteLine("{0}. {1}", i + 1, zoo.animais[i].Nome);
-                        }
-                        int escolhaAnimal = int.Parse(Console.ReadLine()) - 1;
-
-                        if (escolhaAnimal >= 0 && escolhaAnimal < zoo.animais.Count)
-                        {
-                            vet.Examinar(zoo.animais[escolhaAnimal]);
+                            Console.WriteLine("Não há animais no zoológico para examinar.");
                         }
                         else
                         {
-                            Console.WriteLine("Escolha inválida.");
+                            Console.WriteLine("Escolha o animal para examinar:");
+                            for (int i = 0; i < animaisNoZoo.Count; i++)
+                            {
+                                Console.WriteLine("{0}. {1}", i + 1, animaisNoZoo[i].Nome);
+                            }
+                            int escolhaAnimal = int.Parse(Console.ReadLine()) - 1;
+
+                            if (escolhaAnimal >= 0 && escolhaAnimal < animaisNoZoo.Count)
+                            {
+                                vet.Examinar(animaisNoZoo[escolhaAnimal]);
+                            }
+                            else
+                            {
+                                Console.WriteLine("Escolha inválida.");
+                            }
                         }
                     }
                     catch (ArgumentException e)
                     {
                         Console.WriteLine(e.Message);
                     }
-                    Console.WriteLine("Presione algo para sair . . . ");
+                    Console.WriteLine("Pressione algo para continuar...");
                     Console.ReadKey(true);
                     break;
                 case "6":
